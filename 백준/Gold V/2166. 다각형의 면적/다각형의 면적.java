@@ -46,13 +46,11 @@ public class Main {
 		a = a.subtract(b);
 		a = a.abs();
 		a = a.divide(BigDecimal.valueOf(2.0));
-		double result = a.doubleValue();
-
 		//무조건 소수점 첫번째 자리까지 표시
-		BigDecimal k = BigDecimal.valueOf(result).setScale(1, RoundingMode.HALF_UP);
+		a = a.setScale(1, RoundingMode.HALF_UP);
 		
 
-		sb.append(k);
+		sb.append(a);
 		bw.write(sb.toString());
 		bw.flush();
 		bw.close();
