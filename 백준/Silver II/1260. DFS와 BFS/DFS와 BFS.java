@@ -67,7 +67,6 @@ public class Main {
 		for(int i=0; i< graph.get(x).size(); i++) {
 			int next = graph.get(x).get(i);
 			if(dfs_visit[next]) continue;
-			dfs_visit[next] = true;
 			dfs(next);
 		}
 	}
