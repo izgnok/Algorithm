@@ -37,7 +37,7 @@ public class Main {
 			W = Integer.parseInt(st.nextToken());
 			edge = new Node[M * 2 + W];
 
-			Arrays.fill(dist, 987654321);
+			Arrays.fill(dist, Integer.MAX_VALUE);
 
 			int idx = 0;
 			for (int i = 0; i < M; i++) {
