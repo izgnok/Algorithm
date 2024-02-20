@@ -53,10 +53,8 @@ public class Solution {
 					start_y = j;
 					dfs(1, i, j, 0);
 					dessert[map[i][j]] = false;
-
 				}
 			}
-
 			sb.append("#").append(test_case).append(" ").append(result).append("\n");
 		}
 		bw.write(sb.toString());
@@ -85,6 +83,7 @@ public class Solution {
 				dfs(depth + 1, row, col, i);
 				dessert[map[row][col]] = false;
 			}
+			if(row == start_x && col == start_y) break; // 시작점은 방향을 바꿀필요가 없음 
 		}
 		return;
 	}
