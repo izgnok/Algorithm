@@ -48,11 +48,9 @@ public class Solution {
 
 			for (int i = 0; i < N; i++) { // 임의의 한 정점을 시작점으로 잡는다.
 				for (int j = 0; j < N; j++) {
-					dessert[map[i][j]] = true;
 					start_x = i; // 시작점 설정
 					start_y = j;
-					dfs(1, i, j, 0);
-					dessert[map[i][j]] = false;
+					dfs(0, i, j, 0);
 				}
 			}
 			sb.append("#").append(test_case).append(" ").append(result).append("\n");
@@ -64,6 +62,13 @@ public class Solution {
 
 	static void dfs(int depth, int x, int y, int k) { // 시계방향으로 깊이탐색
 
+		if (depth != 0 && x == start_x && y == start_y) { // 시작점에 다시 돌아오면 result 값 갱신
+			if (result < depth) {
+				result = depth;
+			}
+			return;
+		}
+
 		for (int i = k; i <= k + 1; i++) { // 우하, 좌하, 좌상, 우상 ( 사각형을 이루기 위해서는 현재 방향에서 최대 한번만 바꿀수 있음 )
 			if (i == 4)
 				break; // 마지막 방향인 경우 예외처리
@@ -71,19 +76,14 @@ public class Solution {
 			int col = y + direct[i][1];
 
 			if (row >= 0 && row < N && col >= 0 && col < N) {
-				if (row == start_x && col == start_y) { // 시작점에 다시 돌아오면 result 값 갱신
-					if (result < depth) {
-						result = depth;
-					}
-					return;
-				}
 				if (dessert[map[row][col]])
 					continue; // 해당 디저트를 이미 먹은 경우
 				dessert[map[row][col]] = true;
 				dfs(depth + 1, row, col, i);
 				dessert[map[row][col]] = false;
 			}
-			if(row == start_x && col == start_y) break; // 시작점은 방향을 바꿀필요가 없음 
+			if (row == start_x && col == start_y)
+				break; // 시작점은 방향을 바꿀필요가 없음
 		}
 		return;
 	}
