@@ -68,15 +68,12 @@ public class Solution {
 			cur[depth][i] = 0;
 		}
 		dfs(depth + 1, count + 1);
-		// 복구
-		for (int i = 0; i < M; i++) {
-			cur[depth][i] = map[depth][i];
-		}
-		
+
 		for (int i = 0; i < M; i++) { // B약물 투입
 			cur[depth][i] = 1;
 		}
 		dfs(depth + 1, count + 1);
+
 		// 복구
 		for (int i = 0; i < M; i++) {
 			cur[depth][i] = map[depth][i];
