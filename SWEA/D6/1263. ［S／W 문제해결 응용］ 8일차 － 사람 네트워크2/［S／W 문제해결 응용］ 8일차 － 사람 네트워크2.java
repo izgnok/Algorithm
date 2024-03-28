@@ -35,6 +35,9 @@ public class Solution {
 					for (int j = 0; j < N; j++) {
 						if (cost[i][j] == 1)
 							continue;
+                        
+                        if (i==j)
+                            continue;
 
 						if (cost[i][k] == INF || cost[k][j] == INF)
 							continue;
