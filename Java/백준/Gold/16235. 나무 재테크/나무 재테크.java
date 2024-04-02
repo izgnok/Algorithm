@@ -122,32 +122,23 @@ public class Main {
 	}
 
 	static void fall() {
-		for (int i = 1; i <= N; i++) {
-			for (int j = 1; j <= N; j++) {
-				Node node = new Node(i, j);
-				if (!hash.containsKey(node)) { // 해당칸에 나무가 없는 경우
+		while (!reproduce.isEmpty()) {
+			Node node = reproduce.poll();
+			int x = node.x;
+			int y = node.y;
+			for (int d = 0; d < 8; d++) {
+				int row = x + direct[d][0];
+				int col = y + direct[d][1];
+
+				if (row < 1 || row > N || col < 1 || col > N)
 					continue;
-				}
 
-				while (!reproduce.isEmpty()) {
-					Node tmp = reproduce.poll();
-					int x = tmp.x;
-					int y = tmp.y;
-					for (int d = 0; d < 8; d++) {
-						int row = x + direct[d][0];
-						int col = y + direct[d][1];
-
-						if (row < 1 || row > N || col < 1 || col > N)
-							continue;
-
-						Node next = new Node(row, col);
-						if (hash.containsKey(next)) {
-							hash.get(next).add(1);
-						} else {
-							hash.put(next, new PriorityQueue<>());
-							hash.get(next).add(1);
-						}
-					}
+				Node tmp = new Node(row, col);
+				if (hash.containsKey(tmp)) {
+					hash.get(tmp).add(1);
+				} else {
+					hash.put(tmp, new PriorityQueue<>());
+					hash.get(tmp).add(1);
 				}
 			}
 		}
