@@ -16,7 +16,7 @@ public class Main {
 	static boolean check[][];
 	static int visit[];
 	static int result;
-	static boolean possible;
+	static boolean finish;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -28,37 +28,38 @@ public class Main {
 		M = Integer.parseInt(st.nextToken());
 		H = Integer.parseInt(st.nextToken());
 		check = new boolean[H + 1][N + 1];
-		visit = new int[N + 1];
 		while (M-- > 0) {
 			st = new StringTokenizer(br.readLine());
 			int a = Integer.parseInt(st.nextToken());
 			int b = Integer.parseInt(st.nextToken());
 			check[a][b] = true;
-			visit[b]++;
 		}
 
-		result = Integer.MAX_VALUE;
-		dfs(1, 1, 0);
-		if (result != Integer.MAX_VALUE)
-			sb.append(result);
-		else
-			sb.append("-1");
+		result = -1;
+		finish = false;
+		for (int i = 0; i <= 3; i++) { // 뽑을 최대 개수 ( 0 ~ 3 )
+			dfs(1, 1, 0, i);
+			if (finish) {
+				result = i;
+				break;
+			}
+		}
+
+		sb.append(result);
 		bw.write(sb.toString());
 		bw.flush();
 		bw.close();
 	}
 
-	static void dfs(int row, int col, int cnt) {
-		if (cnt > 3) {
+	static void dfs(int row, int col, int cnt, int max) {
+		if (cnt == max) { // 최대개수 뽑은 경우
+			finish = simulation();
 			return;
 		}
 		if (row > H) {
-			if (simulation() && result > cnt) {
-				result = cnt;
-			}
 			return;
 		}
-		
+
 		int next_row = row;
 		int next_col = col;
 		if (next_col == N - 1) {
@@ -68,25 +69,24 @@ public class Main {
 			next_col++;
 		}
 
-		// 이미설치되어있는 경우가 아니고, 양옆의 가로선이 없으며, 해당 열의 가로선이 홀수개인경우
+		// 이미설치되어있는 경우가 아니고, 양옆의 가로선이 없는 경우
 		if (!check[row][col] && !check[row][col - 1] && !check[row][col + 1]) {
 			// 사다리 설치
 			check[row][col] = true;
-			visit[col]++;
-			dfs(next_row, next_col, cnt + 1);
+			dfs(next_row, next_col, cnt + 1, max);
+			if (finish)
+				return;
 
 			// 설치 x
 			check[row][col] = false;
-			visit[col]--;
-			dfs(next_row, next_col, cnt);
+			dfs(next_row, next_col, cnt, max);
 		} else { // 기본적으로 설치 되어있는 경우
-			dfs(next_row, next_col, cnt);
+			dfs(next_row, next_col, cnt, max);
 		}
 	}
 
 	static boolean simulation() {
-		boolean flag = true;
-
+		boolean flag = false;
 		for (int i = 1; i <= N; i++) { // 출발점 1 ~ N
 			int row = 1;
 			int col = i;
