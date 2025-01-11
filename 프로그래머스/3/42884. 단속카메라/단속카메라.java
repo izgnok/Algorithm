@@ -23,7 +23,7 @@ class Solution {
                 answer++;
                 continue;
             }
-            cur = Math.min(cur, node.end);
+            // cur = Math.min(cur, node.end);
         }
         return answer;
     }
