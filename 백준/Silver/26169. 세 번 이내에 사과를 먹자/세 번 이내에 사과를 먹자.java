@@ -27,14 +27,14 @@ public class Main {
         st = new StringTokenizer(br.readLine());
         start = new Node(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
 
-        if (dfs(0, 0, new Node(start.x, start.y), new boolean[5][5])) sb.append("1");
+        if (dfs(0, 0, new Node(start.x, start.y))) sb.append("1");
         else sb.append("0");
         bw.write(sb.toString());
         bw.flush();
         bw.close();
     }
 
-    static boolean dfs(int depth, int count, Node cur, boolean[][] visit) {
+    static boolean dfs(int depth, int count, Node cur) {
         if (count == 2) return true;
         if (depth >= 3) return false;
 
@@ -45,12 +45,9 @@ public class Main {
             int col = cur.y + dir[i][1];
             if (row < 0 || row >= 5 || col < 0 || col >= 5) continue;
             if (map[row][col] == -1) continue;
-            if (visit[row][col]) continue;
-
-            visit[row][col] = true;
+            
             int nextCount = map[row][col] == 1 ? count + 1 : count;
-            if (dfs(depth + 1, nextCount, new Node(row, col), visit)) return true;
-            visit[row][col] = false;
+            if (dfs(depth + 1, nextCount, new Node(row, col))) return true;
         }
         map[cur.x][cur.y] = tmp;
 
