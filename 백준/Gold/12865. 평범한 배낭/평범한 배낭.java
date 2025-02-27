@@ -24,15 +24,13 @@ public class Main {
             int cost = Integer.parseInt(st.nextToken());
             list[i] = new Node(cost, weight);
         }
-
-        DP[0] = 0;
-        for (int i = 0; i < N; i++) { // 현재 아이템 선택
-            for (int k = K; k >= list[i].weight; k--) { // 큰 값부터 업데이트
+        
+        for (int i = 0; i < N; i++) {
+            for (int k = K; k >= list[i].weight; k--) {
                 DP[k] = Math.max(DP[k], DP[k - list[i].weight] + list[i].cost);
             }
         }
-
-
+        
         sb.append(DP[K]);
         bw.write(sb.toString());
         bw.flush();
