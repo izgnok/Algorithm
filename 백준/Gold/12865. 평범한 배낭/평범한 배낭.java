@@ -1,50 +1,50 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.StringTokenizer;
+import org.w3c.dom.Node;
+
+import java.util.*;
+import java.io.*;
 
 public class Main {
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		StringBuilder sb = new StringBuilder();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb = new StringBuilder();
 
-		StringTokenizer st = new StringTokenizer(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-		int N = Integer.parseInt(st.nextToken());
-		int W = Integer.parseInt(st.nextToken());
+        int N = Integer.parseInt(st.nextToken());
+        int K = Integer.parseInt(st.nextToken());
 
-		Node[] input = new Node[N + 1];
-		for (int i = 1; i <= N; i++) {
-			st = new StringTokenizer(br.readLine());
-			input[i] = new Node(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
-		}
 
-		int[][] DP = new int[N + 1][W + 1];
+        Node[] list = new Node[N];
+        int[] DP = new int[K + 1];
 
-		for (int i = 1; i <= N; i++) { // 현재 물건
-			for (int j = 1; j <= W; j++) { // 현재 무게
-				if (j >= input[i].weight) {
-					DP[i][j] = Math.max(DP[i - 1][j], DP[i - 1][j - input[i].weight] + input[i].score);
-				} else {
-					DP[i][j] = DP[i - 1][j];
-				}
-			}
-		}
-		sb.append(DP[N][W] + "\n");
+        for(int i=0; i<N; i++) {
+            st = new StringTokenizer(br.readLine());
+            int weight = Integer.parseInt(st.nextToken());
+            int cost = Integer.parseInt(st.nextToken());
+            list[i] = new Node(cost, weight);
+        }
 
-		bw.write(sb.toString());
-		bw.flush();
-		bw.close();
-	}
+        DP[0] = 0;
+        for (int i = 0; i < N; i++) { // 현재 아이템 선택
+            for (int k = K; k >= list[i].weight; k--) { // 큰 값부터 업데이트
+                DP[k] = Math.max(DP[k], DP[k - list[i].weight] + list[i].cost);
+            }
+        }
 
-	public static class Node {
-		int score, weight;
 
-		Node(int weight, int score) {
-			this.score = score;
-			this.weight = weight;
-		}
-	}
+        sb.append(DP[K]);
+        bw.write(sb.toString());
+        bw.flush();
+        bw.close();
+    }
+
+    static class Node {
+        int cost, weight;
+
+        Node(int cost, int weight) {
+            this.cost = cost;
+            this.weight = weight;
+        }
+    }
 }
