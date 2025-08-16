@@ -49,10 +49,7 @@ public class Main {
         if (a.equals(b)) return size.get(a);
 
         map.put(b, a);
-        int sizeA = size.get(a);
-        int sizeB = size.get(b);
-        size.put(a, sizeA + sizeB);
-        size.put(b, sizeA + sizeB);
+        size.put(a, size.get(a) + size.get(b));
 
         return size.get(a);
     }
