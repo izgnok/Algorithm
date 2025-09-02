@@ -1,100 +1,79 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import org.w3c.dom.Node;
+
+import java.util.*;
+import java.io.*;
 
 public class Main {
-	static int N, M;
-	static int dist[];
-	static int result;
-	static int parent[];
 
-	public static void main(String[] args) throws Exception {
+    static int start, end;
+    static int[] dir = {-1, 1};
+    static int[] parent;
 
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		StringBuilder sb = new StringBuilder();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb = new StringBuilder();
 
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        start = Integer.parseInt(st.nextToken());
+        end = Integer.parseInt(st.nextToken());
 
-		dist = new int[100001];
-		parent = new int[100001];
-		Arrays.fill(dist, Integer.MAX_VALUE);
-		dijkstra(N);
+        parent = new int[100001];
+        parent[start] = -1;
 
-		sb.append(result).append("\n");
 
-		Deque<Integer> stack = new ArrayDeque<>();
-		int k = M;
-		while (k != -1) {
-			stack.addLast(k);
-			k = parent[k];
-		}
-		while (!stack.isEmpty()) {
-			sb.append(stack.pollLast()).append(" ");
-		}
+        int time = bfs();
 
-		bw.write(sb.toString());
-		bw.flush();
-		bw.close();
-	}
+        Deque<Integer> dq = new ArrayDeque<>();
+        int cur = end;
+        while (cur != -1) {
+            dq.addFirst(cur);
+            cur = parent[cur];
+        }
 
-	static void dijkstra(int start) {
-		PriorityQueue<Node> pq = new PriorityQueue<>((o1, o2) -> o1.cost - o2.cost);
-		pq.add(new Node(start, 0));
+        sb.append(time).append("\n");
+        while (!dq.isEmpty()) {
+            sb.append(dq.pollFirst()).append(" ");
+        }
+        bw.write(sb.toString());
+        bw.flush();
+        bw.close();
+    }
 
-		boolean[] visit = new boolean[100001];
-		dist[start] = 0;
-		parent[start] = -1;
 
-		while (!pq.isEmpty()) {
-			Node node = pq.poll();
-			int x = node.x;
-			int cost = node.cost;
-			visit[x] = true;
-			if (x == M) {
-				result = cost;
-				break;
-			}
-			int[] direct = { 0, -1, 1 };
-			for (int i = 0; i < 3; i++) {
-				int next;
-				if (i >= 1)
-					next = x + direct[i];
-				else
-					next = x * 2;
-				if (next >= 0 && next <= 100000) {
-					if (!visit[next]) {
-						if (dist[next] > cost + 1) {
-							dist[next] = cost + 1;
-							parent[next] = x;
-							pq.add(new Node(next, dist[next]));
-						}
-					}
-				}
-			}
+    static int bfs() {
+        PriorityQueue<Node> pq = new PriorityQueue<>((o1, o2) -> o1.time - o2.time);
+        pq.add(new Node(start, 0));
+        int[] visit = new int[1000001];
+        Arrays.fill(visit, 987654321);
+        visit[start] = 0;
 
-		}
-	}
+        while (!pq.isEmpty()) {
+            Node node = pq.poll();
+            if (node.x == end) return node.time;
 
-	static class Node {
-		int x, cost;
+            for (int i = 0; i < 3; i++) {
+                int next = node.x;
+                if (i < 2) {
+                    next += dir[i];
+                } else next *= 2;
 
-		Node(int x, int cost) {
-			this.x = x;
-			this.cost = cost;
-		}
-	}
+                if (next < 0 || next >= 100001) continue;
+                if (visit[next] <= node.time + 1) continue;
+                parent[next] = node.x;
+                visit[next] = node.time + 1;
+                pq.add(new Node(next, visit[next]));
+            }
+        }
+        return -1;
+    }
+
+    static class Node {
+        int x, time;
+
+        Node(int x, int time) {
+            this.x = x;
+            this.time = time;
+        }
+    }
 }
