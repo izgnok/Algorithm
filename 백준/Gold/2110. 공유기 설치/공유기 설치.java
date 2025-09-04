@@ -1,56 +1,46 @@
-import java.io.*;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import org.w3c.dom.Node;
 
+import java.util.*;
+import java.io.*;
 
 public class Main {
-    static int N, C;
-    static int[] arr;
+
+    static int N, K;
+    static List<Integer> list;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st = new StringTokenizer(br.readLine());
         StringBuilder sb = new StringBuilder();
 
+        StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
-        C = Integer.parseInt(st.nextToken());
-        arr = new int[N];
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            arr[i] = Integer.parseInt(st.nextToken());
-        }
-        Arrays.sort(arr);
+        K = Integer.parseInt(st.nextToken());
+
+        list = new ArrayList<>();
+        for (int i = 0; i < N; i++) list.add(Integer.parseInt(br.readLine()));
+        Collections.sort(list);
 
         int start = 1;
-        int end = arr[N - 1] - arr[0];
-        int result = 0;
-        while(start <= end) {
+        int end = list.get(N - 1) - list.get(0);
+        while (start <= end) {
             int mid = (start + end) / 2;
-            if(simulation(mid)) {
-                result = mid;
-                start = mid + 1;
-            } else {
-                end = mid - 1;
-            }
+            if (simulation(mid, K - 1)) start = mid + 1;
+            else end = mid - 1;
         }
-        sb.append(result);
+        sb.append(start - 1);
         bw.write(sb.toString());
         bw.flush();
         bw.close();
     }
 
-    static boolean simulation(int dist) { // 공유기 설치
-        int cnt = C - 1;
-
-        int pre = 0;
-        for(int i=1; i < N; i++) {
-            if(cnt == 0) break;
-            if(arr[i] - arr[pre] >= dist) {
-                cnt--;
-                pre = i;
-            }
+    static boolean simulation(int dist, int k) {
+        int pre = list.get(0);
+        for (int i = 1; i < N; i++) {
+            if (dist > list.get(i) - pre) continue;
+            pre = list.get(i);
+            if (--k == 0) break;
         }
-        return cnt == 0;
+        return k == 0;
     }
 }
