@@ -24,16 +24,9 @@ public class Main {
         list2.sort(Comparator.reverseOrder());
 
         int result = 0;
-        int max = 0;
-        for (int i = 0; i < list.size(); i += K) {
-            result += list.get(i) * 2;
-            max = Math.max(max, list.get(i));
-        }
-        for (int i = 0; i < list2.size(); i += K) {
-            result += list2.get(i) * 2;
-            max = Math.max(max, list2.get(i));
-        }
-        result -= max;
+        for (int i = 0; i < list.size(); i += K) result += list.get(i) * 2;
+        for (int i = 0; i < list2.size(); i += K) result += list2.get(i) * 2;
+        result -= Math.max(list.isEmpty() ? 0 : list.get(0), list2.isEmpty() ? 0 : list2.get(0));
 
         sb.append(result);
         bw.write(sb.toString());
