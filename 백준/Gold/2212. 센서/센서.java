@@ -20,7 +20,7 @@ public class Main {
             Arrays.sort(arr);
 
             PriorityQueue<Integer> pq = new PriorityQueue<>((o1, o2) -> Integer.compare(o2, o1));
-            for (int i = 1; i < N; i++) pq.add(Math.abs(arr[i] - arr[i - 1]));
+            for (int i = 1; i < N; i++) pq.add(arr[i] - arr[i - 1]);
             int result = 0;
             while (K-- > 1) pq.poll();
             while (!pq.isEmpty()) result += pq.poll();
@@ -29,14 +29,5 @@ public class Main {
         bw.write(sb.toString());
         bw.flush();
         bw.close();
-    }
-
-    static class Node {
-        int w, cost;
-
-        Node(int w, int cost) {
-            this.w = w;
-            this.cost = cost;
-        }
     }
 }
