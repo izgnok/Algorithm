@@ -20,7 +20,7 @@ public class Main {
         if (end > 1) sb.append("1");
         else {
             for (int i = 1; i < N; i++) {
-                if (arr[i] != end + 1 && end + 1 - arr[i] <= 0) break;
+                if (arr[i] > end + 1) break;
                 end = end + arr[i];
             }
             sb.append(end + 1);
