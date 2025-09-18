@@ -1,32 +1,12 @@
-# SELECT d.CAR_ID, d.CAR_TYPE, 
-#         ROUND(d.DAILY_FEE * (1 - (CAST(REPLACE(c.DISCOUNT_RATE, '%', '') AS UNSIGNED) / 100)) * 30, 0) AS FEE
-# FROM (
-#     SELECT a.CAR_ID, a.CAR_TYPE, a.DAILY_FEE
-#     FROM CAR_RENTAL_COMPANY_CAR a
-#     JOIN (
-#         SELECT CAR_ID
-#         FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY 
-#         WHERE START_DATE > '2022-10-31' OR END_DATE < '2022-10-01'
-#     ) AS b
-#     ON a.CAR_ID = b.CAR_ID
-#     WHERE a.CAR_TYPE IN ('SUV', '세단')
-#     GROUP BY a.CAR_ID
-# ) AS d
-# JOIN CAR_RENTAL_COMPANY_DISCOUNT_PLAN c
-# ON c.CAR_TYPE = d.CAR_TYPE
-# WHERE c.DURATION_TYPE = "30일 이상" 
-# AND ROUND(d.DAILY_FEE * (1 - (CAST(REPLACE(c.DISCOUNT_RATE, '%', '') AS UNSIGNED) / 100)) * 30, 0) BETWEEN 500000 AND 2000000
-# ORDER BY FEE DESC, d.CAR_TYPE ASC, d.CAR_ID ASC;
+
     
 SELECT d.CAR_ID, d.CAR_TYPE, 
        ROUND(d.DAILY_FEE * (1 - (c.DISCOUNT_RATE / 100)) * 30, 0) AS FEE
 FROM (
-    -- 🚗 1. 대여 가능한 자동차 필터링
     SELECT a.CAR_ID, a.CAR_TYPE, a.DAILY_FEE
     FROM CAR_RENTAL_COMPANY_CAR a
     LEFT JOIN CAR_RENTAL_COMPANY_RENTAL_HISTORY b
     ON a.CAR_ID = b.CAR_ID
-    -- 2022년 11월에 대여 불가능한 차량만 필터링
     WHERE a.CAR_TYPE IN ('세단', 'SUV')
     GROUP BY a.CAR_ID
     HAVING SUM(
@@ -37,10 +17,7 @@ FROM (
         END
     ) = 0
 ) AS d
--- 🚗 2. 할인율 적용을 위해 `JOIN`
 JOIN CAR_RENTAL_COMPANY_DISCOUNT_PLAN c
 ON d.CAR_TYPE = c.CAR_TYPE AND c.DURATION_TYPE = '30일 이상'
--- 🚗 3. 30일 대여 금액이 50만 원 이상 200만 원 미만인 조건 적용
 WHERE ROUND(d.DAILY_FEE * (1 - (c.DISCOUNT_RATE / 100)) * 30, 0) BETWEEN 500000 AND 2000000
--- 🚗 4. 정렬 조건 적용
 ORDER BY FEE DESC, d.CAR_TYPE ASC, d.CAR_ID DESC;
