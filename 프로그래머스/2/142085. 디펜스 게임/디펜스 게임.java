@@ -8,15 +8,13 @@ class Solution {
         for(int e: enemy) {
             n -= e;
             pq.add(e);
-            while(n < 0) {
-                if(pq.isEmpty() || k == 0) break;
+            while(n < 0 && !pq.isEmpty() && k > 0) {
                 n += pq.poll();
                 k--;
             }
             if(n < 0) break;
             answer++;
         }
-        
         return answer;
     }
 }
