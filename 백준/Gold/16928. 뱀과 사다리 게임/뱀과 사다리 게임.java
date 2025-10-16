@@ -32,9 +32,9 @@ public class Main {
         Queue<Node> q = new ArrayDeque<>();
         q.add(new Node(1, 0));
 
-        int[] visit = new int[101];
-        Arrays.fill(visit, 987654321);
-        
+        boolean[] visit = new boolean[101];
+        visit[1] = true;
+
         while (!q.isEmpty()) {
             Node node = q.poll();
 
@@ -43,8 +43,8 @@ public class Main {
                 if (next > 100) break;
                 next = map.getOrDefault(next, next);
                 if (next == 100) return node.count + 1;
-                if (visit[next] <= node.count + 1) continue;
-                visit[next] = node.count + 1;
+                if (visit[next]) continue;
+                visit[next] = true;
                 q.add(new Node(next, node.count + 1));
             }
         }
