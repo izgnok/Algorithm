@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -17,10 +18,7 @@ public class Main {
 
         int INF = 987654321;
         for (int i = 1; i <= N; i++) {
-            for (int j = 1; j <= N; j++) {
-                if (i == j) costs[i][j] = 0;
-                else costs[i][j] = INF;
-            }
+            Arrays.fill(costs[i], INF);
         }
         while (M-- > 0) {
             st = new StringTokenizer(br.readLine());
@@ -33,8 +31,9 @@ public class Main {
         for (int k = 1; k <= N; k++) {
             for (int i = 1; i <= N; i++) {
                 if (i == k) continue;
+                if (costs[i][k] == INF) continue;
                 for (int j = 1; j <= N; j++) {
-                    if (i == j) continue;
+                    if (costs[k][j] == INF) continue;
                     if (costs[i][k] + costs[k][j] < costs[i][j]) {
                         costs[i][j] = costs[i][k] + costs[k][j];
                     }
@@ -44,10 +43,7 @@ public class Main {
 
         int min = INF;
         for (int i = 1; i <= N; i++) {
-            for (int j = 1; j <= N; j++) {
-                if (i == j) continue;
-                min = Math.min(costs[i][j] + costs[j][i], min);
-            }
+            min = Math.min(min, costs[i][i]);
         }
         sb.append(min == INF ? "-1" : min);
         bw.write(sb.toString());
