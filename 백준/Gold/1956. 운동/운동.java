@@ -9,8 +9,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
-
+        
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
@@ -30,7 +29,6 @@ public class Main {
 
         for (int k = 1; k <= N; k++) {
             for (int i = 1; i <= N; i++) {
-                if (i == k) continue;
                 if (costs[i][k] == INF) continue;
                 for (int j = 1; j <= N; j++) {
                     if (costs[k][j] == INF) continue;
