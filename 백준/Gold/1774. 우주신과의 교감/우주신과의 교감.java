@@ -8,7 +8,7 @@ public class Main {
 
     static int N, M;
     static int[] parent;
-
+    static int count;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -41,6 +41,7 @@ public class Main {
             }
         }
 
+        count = 0;
         while (M-- > 0) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
@@ -50,6 +51,7 @@ public class Main {
 
         double result = 0;
         while (!pq.isEmpty()) {
+            if (count == N - 1) break;
             Node node = pq.poll();
             if (!union(node.a, node.b)) continue;
             result += node.cost;
@@ -72,6 +74,7 @@ public class Main {
 
         if (a == b) return false;
         parent[b] = a;
+        count++;
         return true;
     }
 
