@@ -31,11 +31,15 @@ public class Main {
             int g = Integer.parseInt(st.nextToken());
             int h = Integer.parseInt(st.nextToken());
 
+            int costGH = 0;
+
             while (M-- > 0) {
                 st = new StringTokenizer(br.readLine());
                 int a = Integer.parseInt(st.nextToken());
                 int b = Integer.parseInt(st.nextToken());
                 int cost = Integer.parseInt(st.nextToken());
+
+                if ((g == a && h == b) || (g == b && h == a)) costGH = cost;
                 graph.get(a).add(new Node(b, cost));
                 graph.get(b).add(new Node(a, cost));
             }
@@ -51,8 +55,8 @@ public class Main {
 
             List<Integer> result = new ArrayList<>();
             for (int t : target) {
-                int sum1 = costS[g] + costG[h] + costH[t];
-                int sum2 = costS[h] + costH[g] + costG[t];
+                int sum1 = costS[g] + costGH + costH[t];
+                int sum2 = costS[h] + costGH + costG[t];
                 if (costS[t] == sum1 || costS[t] == sum2) result.add(t);
             }
             Collections.sort(result);
