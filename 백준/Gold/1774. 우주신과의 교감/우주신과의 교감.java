@@ -33,8 +33,7 @@ public class Main {
 
         PriorityQueue<Node> pq = new PriorityQueue<>((o1, o2) -> Double.compare(o1.cost, o2.cost));
         for (int i = 1; i <= N; i++) {
-            for (int j = 1; j <= N; j++) {
-                if (i == j) continue;
+            for (int j = i + 1; j <= N; j++) {
                 Pos A = list[i];
                 Pos B = list[j];
                 double cost = Math.sqrt(Math.pow(A.x - B.x, 2) + Math.pow(A.y - B.y, 2));
