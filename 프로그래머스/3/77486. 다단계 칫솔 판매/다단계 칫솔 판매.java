@@ -2,22 +2,18 @@ import java.util.*;
 
 class Solution {
     
-    static Map<String, String> parent;
-    static Map<String, Integer> profit;
+    static Map<String, Node> map;
     
     public int[] solution(String[] enroll, String[] referral, String[] seller, int[] amount) {
         
-        parent = new HashMap<>();
-        profit = new HashMap<>();
+        map = new HashMap<>();
         
         int N = enroll.length;
         for(int i=0; i<N; i++) {
             String name = enroll[i];
-            parent.put(name, "center");
-            profit.put(name, 0);
-            
-            if(referral[i].equals("-")) continue;
-            parent.put(name, referral[i]);
+            Node node = new Node("center", 0);
+            if(!referral[i].equals("-")) node.parent = referral[i];
+            map.put(name, node);
         }
         
         int size = seller.length;
@@ -30,7 +26,7 @@ class Solution {
         
         int[] answer = new int[N];
         for(int i=0; i<N; i++) {
-            answer[i] = profit.get(enroll[i]);
+            answer[i] = map.get(enroll[i]).profit;
         }
         return answer;
     }
@@ -38,12 +34,22 @@ class Solution {
     static void calc(String name, int price) {
        if(name.equals("center")) return;
         
+        Node node = map.get(name);
         
         int nextPrice = (int) (price * 0.1);
-        int myPrice = price - nextPrice;
-        profit.put(name, profit.get(name) + myPrice);
+        node.profit += (price - nextPrice);
         
         if(nextPrice == 0) return;
-        calc(parent.get(name), nextPrice);
+        calc(node.parent, nextPrice);
+    }
+    
+    static class Node {
+        String parent;
+        int profit;
+        
+        Node(String parent, int profit) {
+            this.parent = parent;
+            this.profit = profit;
+        }
     }
 }
